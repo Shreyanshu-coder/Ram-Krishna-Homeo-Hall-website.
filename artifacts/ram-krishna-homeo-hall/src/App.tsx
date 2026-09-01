@@ -1,13 +1,14 @@
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { ArrowRight, Check, ChevronRight, Clock3, FlaskConical, HeartPulse, Leaf, Mail, MapPin, Menu, MessageCircle, Navigation, Phone, ShieldCheck, Sparkles, Stethoscope, Store, X } from 'lucide-react';
+import { ArrowRight, Check, Clock3, FlaskConical, HeartPulse, Leaf, Mail, MapPin, Menu, MessageCircle, Phone, ShieldCheck, Sparkles, Stethoscope, Store, X } from 'lucide-react';
 
 const queryClient = new QueryClient();
 const phone = '1234567892';
 const whatsapp = 'https://wa.me/911234567892';
+const email = 'asc@gmail.com';
 
 const navItems = [
   ['Home', '#home'],
@@ -30,6 +31,13 @@ const services = [
   { title: 'Homeopathic Consultation', body: 'Baat karke samjhein — guidance that starts with listening.', icon: Stethoscope },
   { title: 'Availability Check', body: 'Call or WhatsApp before you visit. We will check it for you.', icon: Phone },
   { title: 'Health & Wellness', body: 'Everyday products to help your home feel well cared for.', icon: HeartPulse },
+];
+
+const photoSlots = [
+  { id: 'shop-front', title: 'Shop front', caption: 'Add a photo of your store entrance', icon: Store },
+  { id: 'medicine-shelf', title: 'Medicine shelves', caption: 'Show your homeopathic collection', icon: FlaskConical },
+  { id: 'consultation', title: 'Consultation space', caption: 'Add your consultation or counter photo', icon: Stethoscope },
+  { id: 'wellness-products', title: 'Wellness products', caption: 'Share products your customers love', icon: HeartPulse },
 ];
 
 function Logo() {
@@ -95,12 +103,36 @@ function AboutIllustration() {
 
 function AppContent() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [selectedPhotos, setSelectedPhotos] = useState<Record<string, string>>({});
+  const [enquiryLinks, setEnquiryLinks] = useState<{ whatsapp: string; email: string } | null>(null);
 
   const closeMenu = () => setMenuOpen(false);
+  const handlePhotoChange = (id: string, event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setSelectedPhotos((current) => ({ ...current, [id]: reader.result as string }));
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSent(true);
+    const formData = new FormData(event.currentTarget);
+    const name = String(formData.get('name') ?? '');
+    const contact = String(formData.get('contact') ?? '');
+    const message = String(formData.get('message') ?? '');
+    const enquiryMessage = `Namaste Ram Krishna Homeo Hall,\n\nName: ${name}\nPhone/Email: ${contact}\nEnquiry: ${message}\n\nSent from the website.`;
+    const enquiryText = encodeURIComponent(enquiryMessage);
+    const subject = encodeURIComponent(`Website enquiry from ${name}`);
+    const body = encodeURIComponent(enquiryMessage);
+    setEnquiryLinks({
+      whatsapp: `${whatsapp}?text=${enquiryText}`,
+      email: `mailto:${email}?subject=${subject}&body=${body}`,
+    });
     event.currentTarget.reset();
   };
 
@@ -193,13 +225,31 @@ function AppContent() {
 
         <section className="gallery section-pad" id="gallery">
           <div className="container-rk">
-            <div className="section-heading reveal"><div className="eyebrow">Inside the hall</div><h2>A calm place to feel looked after.</h2><p>Clean shelves, familiar faces, and a little breathing room. <span lang="hi">आइए, मिलकर बात करते हैं।</span></p></div>
+            <div className="section-heading reveal"><div className="eyebrow">Your photo wall</div><h2>Show people where care happens.</h2><p>Add your shop, medicine, and wellness product photos here. <span lang="hi">अपनी दुकान की तस्वीरें यहाँ जोड़ें।</span></p></div>
             <div className="gallery-grid">
-              <div className="gallery-card large reveal"><Leaf className="gallery-icon" size={30} strokeWidth={1.3} /><h3>Nature-led.<br />People-first.</h3><p>Remedies with a human touch</p></div>
-              <div className="gallery-card gold reveal delay-1"><Sparkles className="gallery-icon" size={24} /><h3>Thoughtful<br />shelves</h3><p>Organised for easy finding</p></div>
-              <div className="gallery-card cream reveal delay-2"><HeartPulse className="gallery-icon" size={24} /><h3>Family<br />wellness</h3><p>For every age, every day</p></div>
-              <div className="gallery-card reveal delay-3"><Navigation className="gallery-icon" size={24} /><h3>Right here,<br />near you.</h3><p>Mashrakh Station Road</p></div>
+              {photoSlots.map(({ id, title, caption, icon: Icon }, index) => (
+                <div className={`gallery-card photo-card ${index === 0 ? 'large' : ''} reveal ${index > 0 ? `delay-${Math.min(index, 3)}` : ''}`} key={id}>
+                  {selectedPhotos[id] ? (
+                    <>
+                      <img src={selectedPhotos[id]} alt={title} />
+                      <label className="photo-change">
+                        Change photo
+                        <input type="file" accept="image/*" onChange={(event) => handlePhotoChange(id, event)} />
+                      </label>
+                    </>
+                  ) : (
+                    <label className="photo-upload">
+                      <Icon className="gallery-icon" size={27} strokeWidth={1.4} />
+                      <span className="photo-upload-title">{title}</span>
+                      <span className="photo-upload-caption">{caption}</span>
+                      <span className="photo-upload-cta">Choose photo <ArrowRight size={14} /></span>
+                      <input type="file" accept="image/*" onChange={(event) => handlePhotoChange(id, event)} />
+                    </label>
+                  )}
+                </div>
+              ))}
             </div>
+            <p className="photo-note"><Sparkles size={15} /> Selected photos preview in this browser. To keep them on the live website, add the image files to your project and update the photo slots in <strong>App.tsx</strong>.</p>
           </div>
         </section>
 
@@ -222,8 +272,17 @@ function AppContent() {
               <div className="field"><label htmlFor="name">YOUR NAME</label><input required id="name" name="name" placeholder="How should we call you?" /></div>
               <div className="field"><label htmlFor="contact-detail">PHONE OR EMAIL</label><input required id="contact-detail" name="contact" placeholder="Your preferred contact" /></div>
               <div className="field"><label htmlFor="message">HOW CAN WE HELP?</label><textarea required id="message" name="message" placeholder="Medicine availability, consultation, or a general question..." /></div>
-              <button className="btn btn-primary" type="submit">Send enquiry <ArrowRight size={16} /></button>
-              {sent && <div className="form-success" role="status">Thank you. Your enquiry is noted — please call 1234567892 for the quickest reply.</div>}
+              <button className="btn btn-primary" type="submit">Prepare enquiry <ArrowRight size={16} /></button>
+              {enquiryLinks && (
+                <div className="form-success" role="status">
+                  <strong>Your message is ready.</strong>
+                  <span>Choose WhatsApp or email below to send it to Ram Krishna Homeo Hall.</span>
+                  <div className="enquiry-actions">
+                    <a className="btn btn-primary" href={enquiryLinks.whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={15} /> Send on WhatsApp</a>
+                    <a className="btn btn-outline" href={enquiryLinks.email}><Mail size={15} /> Send by email</a>
+                  </div>
+                </div>
+              )}
             </form>
           </div>
         </section>
