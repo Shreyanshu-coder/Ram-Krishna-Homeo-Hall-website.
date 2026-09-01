@@ -1,0 +1,254 @@
+import { useState, type FormEvent, type ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ErrorBoundary } from '@/components/error-boundary';
+import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { ArrowRight, Check, ChevronRight, Clock3, FlaskConical, HeartPulse, Leaf, Mail, MapPin, Menu, MessageCircle, Navigation, Phone, ShieldCheck, Sparkles, Stethoscope, Store, X } from 'lucide-react';
+
+const queryClient = new QueryClient();
+const phone = '1234567892';
+const whatsapp = 'https://wa.me/911234567892';
+
+const navItems = [
+  ['Home', '#home'],
+  ['About Us', '#about'],
+  ['Products', '#products'],
+  ['Services', '#services'],
+  ['Contact', '#contact'],
+  ['Gallery', '#gallery'],
+];
+
+const products = [
+  { title: 'Everyday Care', hi: 'दैनिक देखभाल', body: 'Cold, cough, fever and family essentials.', icon: HeartPulse },
+  { title: 'Skin & Hair', hi: 'त्वचा और बाल', body: 'Gentle support for your daily skin wellness.', icon: Leaf },
+  { title: 'Digestive Wellness', hi: 'पाचन स्वास्थ्य', body: 'Thoughtful options for a lighter, happier gut.', icon: FlaskConical },
+  { title: 'Women & Child Care', hi: 'महिला एवं शिशु देखभाल', body: 'Caring solutions for every generation.', icon: ShieldCheck },
+];
+
+const services = [
+  { title: 'Homeopathic Medicines', body: 'Trusted remedies, carefully selected for your family.', icon: FlaskConical },
+  { title: 'Homeopathic Consultation', body: 'Baat karke samjhein — guidance that starts with listening.', icon: Stethoscope },
+  { title: 'Availability Check', body: 'Call or WhatsApp before you visit. We will check it for you.', icon: Phone },
+  { title: 'Health & Wellness', body: 'Everyday products to help your home feel well cared for.', icon: HeartPulse },
+];
+
+function Logo() {
+  return (
+    <a className="brand" href="#home" aria-label="Ram Krishna Homeo Hall home">
+      <span className="brand-mark">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M13 22V7M13 11C9.2 11 6.2 8.5 6.2 5.5C10.4 5.4 13 7.5 13 11ZM13 15C16.7 15 19.7 12.5 19.7 9.5C15.6 9.4 13 11.5 13 15Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M4 22h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      </span>
+      <span>
+        <span className="brand-name">Ram Krishna<br />Homeo Hall</span>
+        <span className="brand-sub">Care, the natural way</span>
+      </span>
+    </a>
+  );
+}
+
+function BottleArtwork() {
+  return (
+    <div className="hero-art" aria-label="Illustration of a homeopathic medicine bottle">
+      <div className="art-orbit" />
+      <svg className="leaf leaf-one" viewBox="0 0 150 100" fill="none" aria-hidden="true">
+        <path d="M12 90C34 49 67 23 134 11C110 64 75 88 12 90Z" fill="currentColor" fillOpacity=".14" stroke="currentColor" strokeWidth="1.3" />
+        <path d="M19 84C58 59 88 37 127 16M48 66l-3-19M73 51l1-20M98 36l8-15" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      </svg>
+      <svg className="leaf leaf-two" viewBox="0 0 150 100" fill="none" aria-hidden="true">
+        <path d="M12 90C34 49 67 23 134 11C110 64 75 88 12 90Z" fill="currentColor" fillOpacity=".14" stroke="currentColor" strokeWidth="1.3" />
+        <path d="M19 84C58 59 88 37 127 16M48 66l-3-19M73 51l1-20M98 36l8-15" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      </svg>
+      <Sparkles className="spark spark-a" size={26} strokeWidth={1.2} />
+      <Sparkles className="spark spark-b" size={19} strokeWidth={1.2} />
+      <div className="bottle">
+        <div className="bottle-cap" />
+        <div className="bottle-neck" />
+        <div className="bottle-body">
+          <div className="bottle-label">
+            <div><small>RAM KRISHNA</small><strong>Homeo<br />Hall</strong><small>EST. 1998 · MASRakh</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AboutIllustration() {
+  return (
+    <svg viewBox="0 0 430 290" fill="none" aria-hidden="true">
+      <path d="M38 225C86 176 101 83 210 63C300 47 329 110 394 83" stroke="hsl(44 89% 58% / .5)" strokeWidth="1" strokeDasharray="4 7" />
+      <path d="M107 216C142 171 128 108 191 91C236 79 252 118 289 97" stroke="hsl(45 27% 96% / .32)" strokeWidth="1" />
+      <path d="M214 251C219 209 215 172 224 143" stroke="hsl(45 27% 96% / .7)" strokeWidth="2" strokeLinecap="round" />
+      <path d="M220 190C186 186 162 164 154 133C188 134 214 151 220 190Z" fill="hsl(44 89% 58% / .7)" />
+      <path d="M220 174C250 169 272 149 278 121C249 124 228 142 220 174Z" fill="hsl(45 27% 96% / .55)" />
+      <path d="M220 218C190 214 173 199 166 177C194 178 214 191 220 218Z" fill="hsl(45 27% 96% / .32)" />
+      <circle cx="224" cy="130" r="12" fill="hsl(45 27% 96% / .1)" stroke="hsl(45 27% 96% / .52)" />
+      <circle cx="224" cy="130" r="4" fill="hsl(44 89% 58%)" />
+      <path d="M44 226h350" stroke="hsl(45 27% 96% / .2)" />
+      <path d="M78 214c-6-45 15-82 52-107M370 217c3-36-14-68-41-89" stroke="hsl(45 27% 96% / .2)" strokeWidth="1" />
+    </svg>
+  );
+}
+
+function AppContent() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSent(true);
+    event.currentTarget.reset();
+  };
+
+  return (
+    <div className="rk-shell">
+      <div className="topline">
+        <div className="container-rk topline-inner">
+          <span>स्थानीय परिवारों की अपनी होम्योपैथिक दुकान · Your neighbourhood care partner</span>
+          <div className="topline-right"><span>7 days open</span><span>7:00 AM — 9:00 PM</span></div>
+        </div>
+      </div>
+      <header className="navbar">
+        <div className="container-rk" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Logo />
+          <nav className={`nav-links ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
+            {navItems.map(([label, href]) => <a key={href} href={href} onClick={closeMenu}>{label}</a>)}
+          </nav>
+          <a className="header-call" href={`tel:${phone}`} aria-label={`Call ${phone}`}><Phone size={16} /><span>Call 1234567892</span></a>
+          <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section className="hero" id="home">
+          <div className="container-rk hero-grid">
+            <div className="hero-copy">
+              <div className="eyebrow reveal">Mashrakh Station Road · Since 1998</div>
+              <h1 className="display-title reveal delay-1">A little more<br /><em>care</em> in every<br />remedy.</h1>
+              <p className="reveal delay-2">Homeopathy that feels personal, practical, and close to home. <span lang="hi">आपके परिवार की सेहत, हमारी ज़िम्मेदारी।</span></p>
+              <div className="hero-actions reveal delay-3">
+                <a className="btn btn-primary" href={`tel:${phone}`}><Phone size={16} /> Call the store</a>
+                <a className="btn btn-outline" href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp us</a>
+              </div>
+              <div className="hero-note reveal delay-3"><Check size={16} /><span><strong>Open every day</strong> · 7:00 AM–9:00 PM · Walk in or call ahead</span></div>
+            </div>
+            <BottleArtwork />
+          </div>
+        </section>
+
+        <section className="trust-strip">
+          <div className="container-rk trust-inner">
+            <div className="trust-item"><Store size={22} /><span>Neighbourhood trusted<br />स्थानीय भरोसा</span></div>
+            <div className="trust-item"><ShieldCheck size={22} /><span>Carefully sourced remedies<br />सही दवा, सही सलाह</span></div>
+            <div className="trust-item"><Clock3 size={22} /><span>Open 7 days a week<br />आपके समय के अनुसार</span></div>
+          </div>
+        </section>
+
+        <section className="about section-pad" id="about">
+          <div className="container-rk about-grid">
+            <div className="about-visual reveal"><div className="eyebrow" style={{ color: 'hsl(44 89% 58%)' }}>Our promise / हमारा वादा</div><AboutIllustration /><div className="about-badge"><strong>25+</strong><span>years of local care</span></div></div>
+            <div className="about-copy reveal delay-1">
+              <div className="eyebrow">About Ram Krishna Homeo Hall</div>
+              <h2>Good health begins with a good conversation.</h2>
+              <p>We are a family-run homeopathic medical store on Mashrakh Station Road. For more than two decades, our approach has stayed simple: listen carefully, suggest thoughtfully, and make finding the right medicine less stressful.</p>
+              <p lang="hi">यहाँ हर परिवार को सम्मान, धैर्य और सच्ची सलाह मिलती है।</p>
+              <div className="point-list">
+                <div className="point"><Check size={17} /> Genuine homeopathic medicines</div>
+                <div className="point"><Check size={17} /> Friendly guidance, without the rush</div>
+                <div className="point"><Check size={17} /> Easy availability checks on call</div>
+              </div>
+              <a className="btn btn-outline" href="#contact">Find us on the road <ArrowRight size={15} /></a>
+            </div>
+          </div>
+        </section>
+
+        <section className="products section-pad" id="products">
+          <div className="container-rk product-layout">
+            <div className="product-intro reveal">
+              <div className="eyebrow">A considered shelf</div>
+              <h2 className="section-heading" style={{ marginTop: 15, marginBottom: 0 }}><span style={{ fontFamily: 'var(--app-font-serif)', fontSize: 'clamp(2.3rem,5vw,4.2rem)', lineHeight: 1, letterSpacing: '-.07em' }}>Everyday wellness,<br /><em style={{ color: 'hsl(var(--primary))', fontStyle: 'normal' }}>made personal.</em></span></h2>
+              <p>From familiar family remedies to everyday health essentials, browse our categories or ask us what is in stock.</p>
+              <div className="category-list"><div>Cold, Cough & Fever <span>01</span></div><div>Skin, Hair & Allergy <span>02</span></div><div>Digestive Care <span>03</span></div><div>Women & Child Care <span>04</span></div></div>
+            </div>
+            <div className="product-grid">
+              {products.map(({ title, hi, body, icon: Icon }, index) => <article className="product-card reveal" style={{ animationDelay: `${index * .1}s` }} key={title}><div className="product-icon"><Icon size={21} /></div><h3>{title}<br /><span lang="hi" style={{ fontSize: '.72em', opacity: .65 }}>{hi}</span></h3><p>{body}</p></article>)}
+            </div>
+          </div>
+        </section>
+
+        <section className="services section-pad" id="services">
+          <div className="container-rk">
+            <div className="section-heading reveal"><div className="eyebrow">How we help</div><h2>More than a medicine counter.</h2><p>Thoda samay, sahi salah, aur aapke liye ek familiar face. That is the Ram Krishna way.</p></div>
+            <div className="service-list">
+              {services.map(({ title, body, icon: Icon }, index) => <article className="service-item reveal" style={{ animationDelay: `${index * .1}s` }} key={title}><Icon size={25} strokeWidth={1.5} /><h3>{title}</h3><p>{body}</p></article>)}
+            </div>
+          </div>
+        </section>
+
+        <section className="gallery section-pad" id="gallery">
+          <div className="container-rk">
+            <div className="section-heading reveal"><div className="eyebrow">Inside the hall</div><h2>A calm place to feel looked after.</h2><p>Clean shelves, familiar faces, and a little breathing room. <span lang="hi">आइए, मिलकर बात करते हैं।</span></p></div>
+            <div className="gallery-grid">
+              <div className="gallery-card large reveal"><Leaf className="gallery-icon" size={30} strokeWidth={1.3} /><h3>Nature-led.<br />People-first.</h3><p>Remedies with a human touch</p></div>
+              <div className="gallery-card gold reveal delay-1"><Sparkles className="gallery-icon" size={24} /><h3>Thoughtful<br />shelves</h3><p>Organised for easy finding</p></div>
+              <div className="gallery-card cream reveal delay-2"><HeartPulse className="gallery-icon" size={24} /><h3>Family<br />wellness</h3><p>For every age, every day</p></div>
+              <div className="gallery-card reveal delay-3"><Navigation className="gallery-icon" size={24} /><h3>Right here,<br />near you.</h3><p>Mashrakh Station Road</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="contact section-pad" id="contact">
+          <div className="container-rk contact-grid">
+            <div className="contact-card reveal">
+              <div className="eyebrow" style={{ color: 'hsl(44 89% 58%)' }}>Come by, call, or message</div>
+              <h3>Let’s find what<br />you need.</h3>
+              <p>Medicine availability check karni hai? We are only a call away. For urgent concerns, please consult a qualified medical professional.</p>
+              <div className="contact-actions"><a className="btn btn-primary" href={`tel:${phone}`}><Phone size={16} /> Call now</a><a className="btn btn-outline" style={{ borderColor: 'hsl(45 27% 96% / .35)', color: 'hsl(45 27% 96%)' }} href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp</a></div>
+              <div className="contact-details">
+                <div className="detail"><MapPin size={17} /><span>Mashrakh Station Road<br /><small>Easy to find, right in your neighbourhood</small></span></div>
+                <div className="detail"><Clock3 size={17} /><span>Open all 7 days · 7:00 AM–9:00 PM</span></div>
+                <div className="detail"><Mail size={17} /><span>asc@gmail.com</span></div>
+              </div>
+            </div>
+            <form className="contact-form reveal delay-1" onSubmit={handleSubmit}>
+              <div className="eyebrow">Send an enquiry</div>
+              <h3>Ask us anything.<br /><span className="muted">We’ll get back to you.</span></h3>
+              <div className="field"><label htmlFor="name">YOUR NAME</label><input required id="name" name="name" placeholder="How should we call you?" /></div>
+              <div className="field"><label htmlFor="contact-detail">PHONE OR EMAIL</label><input required id="contact-detail" name="contact" placeholder="Your preferred contact" /></div>
+              <div className="field"><label htmlFor="message">HOW CAN WE HELP?</label><textarea required id="message" name="message" placeholder="Medicine availability, consultation, or a general question..." /></div>
+              <button className="btn btn-primary" type="submit">Send enquiry <ArrowRight size={16} /></button>
+              {sent && <div className="form-success" role="status">Thank you. Your enquiry is noted — please call 1234567892 for the quickest reply.</div>}
+            </form>
+          </div>
+        </section>
+      </main>
+      <footer className="footer">
+        <div className="container-rk footer-inner"><Logo /><span className="footer-note">© {new Date().getFullYear()} Ram Krishna Homeo Hall<br />Made for our local families.</span></div>
+      </footer>
+      <a className="floating-whatsapp" href={whatsapp} target="_blank" rel="noreferrer" aria-label="Chat with Ram Krishna Homeo Hall on WhatsApp"><MessageCircle size={21} /></a>
+    </div>
+  );
+}
+
+function RoutedErrorBoundary({ children }: { children: ReactNode }) {
+  return <ErrorBoundary resetKey="ram-krishna-homeo-hall">{children}</ErrorBoundary>;
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <RoutedErrorBoundary><AppContent /></RoutedErrorBoundary>
+        <Toaster />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;
