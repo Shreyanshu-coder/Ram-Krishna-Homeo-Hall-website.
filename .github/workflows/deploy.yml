@@ -33,9 +33,9 @@ jobs:
         with:
           version: 10
 
-      - name: Install dependencies
-  working-directory: artifacts/ram-krishna-homeo-hall
-  run: pnpm install --no-frozen-lockfile
+            - name: Install dependencies
+        working-directory: artifacts/ram-krishna-homeo-hall
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build website
         working-directory: artifacts/ram-krishna-homeo-hall
