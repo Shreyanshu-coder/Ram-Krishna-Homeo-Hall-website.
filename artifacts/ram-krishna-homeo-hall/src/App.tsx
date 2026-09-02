@@ -1,20 +1,30 @@
-import { useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
+// import { useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ArrowRight, Check, Clock3, FlaskConical, HeartPulse, Leaf, Mail, MapPin, Menu, MessageCircle, Phone, ShieldCheck, Sparkles, Stethoscope, Store, X } from 'lucide-react';
+import img1 from "./images/img1.jpeg";
+import img2 from "./images/img2.jpeg";
+import img3 from "./images/img3.jpeg";
+import img4 from "./images/img4.jpeg";
 
 const queryClient = new QueryClient();
-const phone = '1234567892';
-const whatsapp = 'https://wa.me/911234567892';
-const email = 'asc@gmail.com';
+const phone = '7765971510';
+const whatsapp = 'https://wa.me/917765971510';
+const email = 'ramkrishnahomeo@gmail.com';
+const mapsLink = 'https://maps.app.goo.gl/UebZ9TUCkw3Mgd4c6';
+const doctorName = 'Dr. Ramkrishna Prasad';
+const doctorEducation = 'B.H.M.S';
+
 
 const navItems = [
   ['Home', '#home'],
   ['About Us', '#about'],
   ['Products', '#products'],
   ['Services', '#services'],
+  ['Doctor', '#doctor'],
   ['Contact', '#contact'],
   ['Gallery', '#gallery'],
 ];
@@ -34,15 +44,15 @@ const services = [
 ];
 
 const photoSlots = [
-  { id: 'shop-front', title: 'Shop front', caption: 'Add a photo of your store entrance', icon: Store },
-  { id: 'medicine-shelf', title: 'Medicine shelves', caption: 'Show your homeopathic collection', icon: FlaskConical },
-  { id: 'consultation', title: 'Consultation space', caption: 'Add your consultation or counter photo', icon: Stethoscope },
-  { id: 'wellness-products', title: 'Wellness products', caption: 'Share products your customers love', icon: HeartPulse },
+  { id: 'shop-front', title: 'Shop front', image: img1, icon: Store },
+  { id: 'medicine-shelf', title: 'Medicine shelves', image: img2, icon: FlaskConical },
+  { id: 'consultation', title: 'Consultation space', image: img3, icon: Stethoscope },
+  { id: 'wellness-products', title: 'Wellness products', image: img4, icon: HeartPulse },
 ];
 
 function Logo() {
   return (
-    <a className="brand" href="#home" aria-label="Ram Krishna Homeo Hall home">
+    <a className="brand" href="#home" aria-label="Ram Krishna Homeo Hall and Clinic home">
       <span className="brand-mark">
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
           <path d="M13 22V7M13 11C9.2 11 6.2 8.5 6.2 5.5C10.4 5.4 13 7.5 13 11ZM13 15C16.7 15 19.7 12.5 19.7 9.5C15.6 9.4 13 11.5 13 15Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -76,7 +86,7 @@ function BottleArtwork() {
         <div className="bottle-neck" />
         <div className="bottle-body">
           <div className="bottle-label">
-            <div><small>RAM KRISHNA</small><strong>Homeo<br />Hall</strong><small>EST. 1998 · MASRakh</small></div>
+            <div><small>RAM KRISHNA</small><strong>Homeo<br />Hall</strong><small>· MASRHRAKH</small></div>
           </div>
         </div>
       </div>
@@ -103,21 +113,22 @@ function AboutIllustration() {
 
 function AppContent() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedPhotos, setSelectedPhotos] = useState<Record<string, string>>({});
+  // const [selectedPhotos, setSelectedPhotos] = useState<Record<string, string>>({});
   const [enquiryLinks, setEnquiryLinks] = useState<{ whatsapp: string; email: string } | null>(null);
+  const [appointmentLink, setAppointmentLink] = useState<string | null>(null);
 
   const closeMenu = () => setMenuOpen(false);
-  const handlePhotoChange = (id: string, event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setSelectedPhotos((current) => ({ ...current, [id]: reader.result as string }));
-      }
-    };
-    reader.readAsDataURL(file);
-  };
+  // const handlePhotoChange = (id: string, event: ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (!file) return;
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     if (typeof reader.result === 'string') {
+  //       setSelectedPhotos((current) => ({ ...current, [id]: reader.result as string }));
+  //     }
+  //   };
+  //   reader.readAsDataURL(file);
+  // };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -125,7 +136,7 @@ function AppContent() {
     const name = String(formData.get('name') ?? '');
     const contact = String(formData.get('contact') ?? '');
     const message = String(formData.get('message') ?? '');
-    const enquiryMessage = `Namaste Ram Krishna Homeo Hall,\n\nName: ${name}\nPhone/Email: ${contact}\nEnquiry: ${message}\n\nSent from the website.`;
+    const enquiryMessage = `Namaste Ram Krishna Homeo Hall and Clinic,\n\nName: ${name}\nPhone/Email: ${contact}\nEnquiry: ${message}\n\nSent from the website.`;
     const enquiryText = encodeURIComponent(enquiryMessage);
     const subject = encodeURIComponent(`Website enquiry from ${name}`);
     const body = encodeURIComponent(enquiryMessage);
@@ -136,12 +147,25 @@ function AppContent() {
     event.currentTarget.reset();
   };
 
+  const handleAppointmentSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const name = String(formData.get('name') ?? '');
+    const age = String(formData.get('age') ?? '');
+    const gender = String(formData.get('gender') ?? '');
+    const appointmentMessage = `Namaste ${doctorName},\n\nI would like to book an appointment.\n\nName: ${name}\nAge: ${age}\nGender: ${gender}\n\nBooked from the website.`;
+    const link = `${whatsapp}?text=${encodeURIComponent(appointmentMessage)}`;
+    setAppointmentLink(link);
+    window.open(link, '_blank', 'noopener,noreferrer');
+    event.currentTarget.reset();
+  };
+
   return (
     <div className="rk-shell">
       <div className="topline">
         <div className="container-rk topline-inner">
           <span>स्थानीय परिवारों की अपनी होम्योपैथिक दुकान · Your neighbourhood care partner</span>
-          <div className="topline-right"><span>7 days open</span><span>7:00 AM — 9:00 PM</span></div>
+          <div className="topline-right"><span>7 days open</span><span> 08:00 AM–02:00 PM and 3:00 PM-8:00 PM</span></div>
         </div>
       </div>
       <header className="navbar">
@@ -150,7 +174,7 @@ function AppContent() {
           <nav className={`nav-links ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
             {navItems.map(([label, href]) => <a key={href} href={href} onClick={closeMenu}>{label}</a>)}
           </nav>
-          <a className="header-call" href={`tel:${phone}`} aria-label={`Call ${phone}`}><Phone size={16} /><span>Call 1234567892</span></a>
+          <a className="header-call" href={`tel:${phone}`} aria-label={`Call ${phone}`}><Phone size={16} /><span>Call 7765971510</span></a>
           <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen}>
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -161,14 +185,14 @@ function AppContent() {
         <section className="hero" id="home">
           <div className="container-rk hero-grid">
             <div className="hero-copy">
-              <div className="eyebrow reveal">Mashrakh Station Road · Since 1998</div>
+              <div className="eyebrow reveal">Mashrakh Station Road </div>
               <h1 className="display-title reveal delay-1">A little more<br /><em>care</em> in every<br />remedy.</h1>
               <p className="reveal delay-2">Homeopathy that feels personal, practical, and close to home. <span lang="hi">आपके परिवार की सेहत, हमारी ज़िम्मेदारी।</span></p>
               <div className="hero-actions reveal delay-3">
                 <a className="btn btn-primary" href={`tel:${phone}`}><Phone size={16} /> Call the store</a>
                 <a className="btn btn-outline" href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp us</a>
               </div>
-              <div className="hero-note reveal delay-3"><Check size={16} /><span><strong>Open every day</strong> · 7:00 AM–9:00 PM · Walk in or call ahead</span></div>
+              <div className="hero-note reveal delay-3"><Check size={16} /><span><strong>Open every day</strong> · 08:00 AM–02:00 PM and 3:00 PM-8:00 PM · Walk in or call ahead</span></div>
             </div>
             <BottleArtwork />
           </div>
@@ -186,7 +210,7 @@ function AppContent() {
           <div className="container-rk about-grid">
             <div className="about-visual reveal"><div className="eyebrow" style={{ color: 'hsl(44 89% 58%)' }}>Our promise / हमारा वादा</div><AboutIllustration /><div className="about-badge"><strong>25+</strong><span>years of local care</span></div></div>
             <div className="about-copy reveal delay-1">
-              <div className="eyebrow">About Ram Krishna Homeo Hall</div>
+              <div className="eyebrow">About Ram Krishna Homeo Hall and Clinic</div>
               <h2>Good health begins with a good conversation.</h2>
               <p>We are a family-run homeopathic medical store on Mashrakh Station Road. For more than two decades, our approach has stayed simple: listen carefully, suggest thoughtfully, and make finding the right medicine less stressful.</p>
               <p lang="hi">यहाँ हर परिवार को सम्मान, धैर्य और सच्ची सलाह मिलती है।</p>
@@ -225,31 +249,70 @@ function AppContent() {
 
         <section className="gallery section-pad" id="gallery">
           <div className="container-rk">
-            <div className="section-heading reveal"><div className="eyebrow">Your photo wall</div><h2>Show people where care happens.</h2><p>Add your shop, medicine, and wellness product photos here. <span lang="hi">अपनी दुकान की तस्वीरें यहाँ जोड़ें।</span></p></div>
-            <div className="gallery-grid">
-              {photoSlots.map(({ id, title, caption, icon: Icon }, index) => (
-                <div className={`gallery-card photo-card ${index === 0 ? 'large' : ''} reveal ${index > 0 ? `delay-${Math.min(index, 3)}` : ''}`} key={id}>
-                  {selectedPhotos[id] ? (
-                    <>
-                      <img src={selectedPhotos[id]} alt={title} />
-                      <label className="photo-change">
-                        Change photo
-                        <input type="file" accept="image/*" onChange={(event) => handlePhotoChange(id, event)} />
-                      </label>
-                    </>
-                  ) : (
-                    <label className="photo-upload">
-                      <Icon className="gallery-icon" size={27} strokeWidth={1.4} />
-                      <span className="photo-upload-title">{title}</span>
-                      <span className="photo-upload-caption">{caption}</span>
-                      <span className="photo-upload-cta">Choose photo <ArrowRight size={14} /></span>
-                      <input type="file" accept="image/*" onChange={(event) => handlePhotoChange(id, event)} />
-                    </label>
-                  )}
+            <div className="section-heading reveal">
+              <div className="eyebrow">Our Space / हमारी जगह</div>
+              <h2>Take a glimpse of where care happens.</h2>
+              <p>
+                A look inside Ram Krishna Homeo Hall & Clinic —
+                <span lang="hi"> आपकी सेहत और भरोसे का अपना स्थान।</span>
+              </p>
+            </div>            <div className="gallery-grid">
+              {photoSlots.map(({ id, title, image }, index) => (
+                <div
+                  className={`gallery-card photo-card ${index === 0 ? 'large' : ''
+                    } reveal ${index > 0 ? `delay-${Math.min(index, 3)}` : ''}`}
+                  key={id}
+                >
+                  <img src={image} alt={title} />
+                  <div className="photo-caption">{title}</div>
                 </div>
               ))}
             </div>
-            <p className="photo-note"><Sparkles size={15} /> Selected photos preview in this browser. To keep them on the live website, add the image files to your project and update the photo slots in <strong>App.tsx</strong>.</p>
+            <br></br>
+            <p className="photo-note"><Sparkles size={15} /> A glimpse of Ram Krishna Homeo Hall & Clinic — trusted care, familiar faces, and a place close to home. <strong>🌿</strong>.</p>
+          </div>
+        </section>
+
+        <section className="doctor section-pad" id="doctor">
+          <div className="container-rk contact-grid">
+            <div className="contact-card reveal">
+              <div className="eyebrow" style={{ color: 'hsl(44 89% 58%)' }}>Meet the doctor</div>
+              <h3>{doctorName}</h3>
+              <p>{doctorEducation} — homeopathic consultation available at Ram Krishna Homeo Hall and Clinic. Book a slot and we will confirm the timing with you on WhatsApp.</p>
+              <div className="contact-actions">
+                <a className="btn btn-primary" href={`tel:${phone}`}><Phone size={16} /> Call the doctor</a>
+                <a className="btn btn-outline" style={{ borderColor: 'hsl(45 27% 96% / .35)', color: 'hsl(45 27% 96%)' }} href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp</a>
+              </div>
+              <div className="contact-details">
+                <div className="detail"><Stethoscope size={17} /><span>Homeopathic Physician<br /><small>{doctorEducation}</small></span></div>
+                <div className="detail"><Phone size={17} /><span>{phone}</span></div>
+              </div>
+            </div>
+            <form className="contact-form reveal delay-1" onSubmit={handleAppointmentSubmit}>
+              <div className="eyebrow">Book an appointment</div>
+              <h3>Reserve your visit.<br /><span className="muted">Sent straight to WhatsApp.</span></h3>
+              <div className="field"><label htmlFor="apt-name">PATIENT NAME</label><input required id="apt-name" name="name" placeholder="Full name" /></div>
+              <div className="field"><label htmlFor="apt-age">AGE</label><input required type="number" min="0" max="120" id="apt-age" name="age" placeholder="Age in years" /></div>
+              <div className="field">
+                <label htmlFor="apt-gender">GENDER</label>
+                <select required id="apt-gender" name="gender" defaultValue="">
+                  <option value="" disabled>Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <button className="btn btn-primary" type="submit"><MessageCircle size={16} /> Book on WhatsApp</button>
+              {appointmentLink && (
+                <div className="form-success" role="status">
+                  <strong>Opening WhatsApp…</strong>
+                  <span>If it did not open automatically, tap below to send your appointment request to {doctorName}.</span>
+                  <div className="enquiry-actions">
+                    <a className="btn btn-primary" href={appointmentLink} target="_blank" rel="noreferrer"><MessageCircle size={15} /> Send on WhatsApp</a>
+                  </div>
+                </div>
+              )}
+            </form>
           </div>
         </section>
 
@@ -261,9 +324,22 @@ function AppContent() {
               <p>Medicine availability check karni hai? We are only a call away. For urgent concerns, please consult a qualified medical professional.</p>
               <div className="contact-actions"><a className="btn btn-primary" href={`tel:${phone}`}><Phone size={16} /> Call now</a><a className="btn btn-outline" style={{ borderColor: 'hsl(45 27% 96% / .35)', color: 'hsl(45 27% 96%)' }} href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp</a></div>
               <div className="contact-details">
-                <div className="detail"><MapPin size={17} /><span>Mashrakh Station Road<br /><small>Easy to find, right in your neighbourhood</small></span></div>
-                <div className="detail"><Clock3 size={17} /><span>Open all 7 days · 7:00 AM–9:00 PM</span></div>
-                <div className="detail"><Mail size={17} /><span>asc@gmail.com</span></div>
+                <div className="detail">
+                  <MapPin size={17} />
+                  <span>
+                    <a
+                      href={mapsLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ color: 'inherit', textDecoration: 'none' }}
+                    >
+                      Ram Krishna Homeo Hall & Clinic
+                    </a>
+                    <br />
+                    <small>Mashrakh Station Road, Masrakh, Bihar 841417</small>
+                  </span>
+                </div>                <div className="detail"><Clock3 size={17} /><span>Open all 7 days ·  08:00 AM–02:00 PM and 3:00 PM-8:00 PM</span></div>
+                <div className="detail"><Mail size={17} /><span>ramkrishnahomeo@gmail.com</span></div>
               </div>
             </div>
             <form className="contact-form reveal delay-1" onSubmit={handleSubmit}>
@@ -276,7 +352,7 @@ function AppContent() {
               {enquiryLinks && (
                 <div className="form-success" role="status">
                   <strong>Your message is ready.</strong>
-                  <span>Choose WhatsApp or email below to send it to Ram Krishna Homeo Hall.</span>
+                  <span>Choose WhatsApp or email below to send it to Ram Krishna Homeo Hall and Clinic.</span>
                   <div className="enquiry-actions">
                     <a className="btn btn-primary" href={enquiryLinks.whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={15} /> Send on WhatsApp</a>
                     <a className="btn btn-outline" href={enquiryLinks.email}><Mail size={15} /> Send by email</a>
@@ -288,9 +364,9 @@ function AppContent() {
         </section>
       </main>
       <footer className="footer">
-        <div className="container-rk footer-inner"><Logo /><span className="footer-note">© {new Date().getFullYear()} Ram Krishna Homeo Hall<br />Made for our local families.</span></div>
+        <div className="container-rk footer-inner"><Logo /><span className="footer-note">© {new Date().getFullYear()} Ram Krishna Homeo Hall and Clinic<br />Made for our local families.</span></div>
       </footer>
-      <a className="floating-whatsapp" href={whatsapp} target="_blank" rel="noreferrer" aria-label="Chat with Ram Krishna Homeo Hall on WhatsApp"><MessageCircle size={21} /></a>
+      <a className="floating-whatsapp" href={whatsapp} target="_blank" rel="noreferrer" aria-label="Chat with Ram Krishna Homeo Hall and Clinic on WhatsApp"><MessageCircle size={21} /></a>
     </div>
   );
 }
