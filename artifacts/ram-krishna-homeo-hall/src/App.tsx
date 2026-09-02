@@ -13,8 +13,8 @@ import img5 from "./images/img5.jpeg";
 import img6 from "./images/img6.jpeg";
 import img7 from "./images/img7.jpeg";
 import img8 from "./images/img8.jpeg";
-import img9 from "./images/img1.jpeg";
-import img10 from "./images/img2.jpeg";
+import img9 from "./images/img9.jpeg";
+import img10 from "./images/img10.jpeg";
 
 const queryClient = new QueryClient();
 const phone = '7765971510';
