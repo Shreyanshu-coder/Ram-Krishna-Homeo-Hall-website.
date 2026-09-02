@@ -9,6 +9,12 @@ import img1 from "./images/img1.jpeg";
 import img2 from "./images/img2.jpeg";
 import img3 from "./images/img3.jpeg";
 import img4 from "./images/img4.jpeg";
+import img5 from "./images/img5.jpeg";
+import img6 from "./images/img6.jpeg";
+import img7 from "./images/img7.jpeg";
+import img8 from "./images/img8.jpeg";
+import img9 from "./images/img1.jpeg";
+import img10 from "./images/img2.jpeg";
 
 const queryClient = new QueryClient();
 const phone = '7765971510';
@@ -44,10 +50,16 @@ const services = [
 ];
 
 const photoSlots = [
-  { id: 'shop-front', title: 'Shop front', image: img1, icon: Store },
-  { id: 'medicine-shelf', title: 'Medicine shelves', image: img2, icon: FlaskConical },
-  { id: 'consultation', title: 'Consultation space', image: img3, icon: Stethoscope },
-  { id: 'wellness-products', title: 'Wellness products', image: img4, icon: HeartPulse },
+  { id: 'shop-front', title: 'Shop front', image: img1 },
+  { id: 'medicine-shelf', title: 'Medicine shelves', image: img2 },
+  { id: 'consultation', title: 'Consultation space', image: img3 },
+  { id: 'wellness-products', title: 'Wellness products', image: img4 },
+  { id: 'clinic-interior', title: 'Clinic interior', image: img5 },
+  { id: 'homeopathic-medicines', title: 'Homeopathic medicines', image: img6 },
+  { id: 'medicine-display', title: 'Medicine display', image: img7 },
+  { id: 'clinic-space', title: 'Clinic space', image: img8 },
+  { id: 'health-products', title: 'Health and wellness products', image: img9 },
+  { id: 'clinic-view', title: 'Ram Krishna Homeo Hall & Clinic', image: img10 },
 ];
 
 function Logo() {
@@ -86,7 +98,7 @@ function BottleArtwork() {
         <div className="bottle-neck" />
         <div className="bottle-body">
           <div className="bottle-label">
-            <div><small>RAM KRISHNA</small><strong>Homeo<br />Hall</strong><small>· MASRHRAKH</small></div>
+            <div><small>RAM KRISHNA</small><strong>Homeo<br />Hall</strong><small>· MASHRAKH</small></div>
           </div>
         </div>
       </div>
@@ -186,9 +198,16 @@ function AppContent() {
           <div className="container-rk hero-grid">
             <div className="hero-copy">
               <div className="eyebrow reveal">Mashrakh Station Road </div>
-              <h1 className="display-title reveal delay-1">A little more<br /><em>care</em> in every<br />remedy.</h1>
-              <p className="reveal delay-2">Homeopathy that feels personal, practical, and close to home. <span lang="hi">आपके परिवार की सेहत, हमारी ज़िम्मेदारी।</span></p>
-              <div className="hero-actions reveal delay-3">
+              <h1 className="display-title reveal delay-1">
+                Homeopathic Care<br />
+                <em>in Mashrakh</em><br />
+                You Can Trust.
+              </h1>
+              <p className="reveal delay-2">
+                Ram Krishna Homeo Hall & Clinic provides homeopathic medicines,
+                consultation, and everyday wellness care on Mashrakh Station Road, Bihar.
+                <span lang="hi"> आपके परिवार की सेहत, हमारी ज़िम्मेदारी।</span>
+              </p>              <div className="hero-actions reveal delay-3">
                 <a className="btn btn-primary" href={`tel:${phone}`}><Phone size={16} /> Call the store</a>
                 <a className="btn btn-outline" href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp us</a>
               </div>
@@ -211,8 +230,12 @@ function AppContent() {
             <div className="about-visual reveal"><div className="eyebrow" style={{ color: 'hsl(44 89% 58%)' }}>Our promise / हमारा वादा</div><AboutIllustration /><div className="about-badge"><strong>25+</strong><span>years of local care</span></div></div>
             <div className="about-copy reveal delay-1">
               <div className="eyebrow">About Ram Krishna Homeo Hall and Clinic</div>
-              <h2>Good health begins with a good conversation.</h2>
-              <p>We are a family-run homeopathic medical store on Mashrakh Station Road. For more than two decades, our approach has stayed simple: listen carefully, suggest thoughtfully, and make finding the right medicine less stressful.</p>
+              <h2>Homeopathic Care for Families in Mashrakh.</h2>              <p>
+                Ram Krishna Homeo Hall and Clinic is a family-run homeopathic medical
+                store and clinic on Mashrakh Station Road, Masrakh, Bihar. For more
+                than two decades, our approach has stayed simple: listen carefully,
+                suggest thoughtfully, and make finding the right medicine less stressful.
+              </p>
               <p lang="hi">यहाँ हर परिवार को सम्मान, धैर्य और सच्ची सलाह मिलती है।</p>
               <div className="point-list">
                 <div className="point"><Check size={17} /> Genuine homeopathic medicines</div>
@@ -263,7 +286,11 @@ function AppContent() {
                     } reveal ${index > 0 ? `delay-${Math.min(index, 3)}` : ''}`}
                   key={id}
                 >
-                  <img src={image} alt={title} />
+                  <img
+                    src={image}
+                    alt={`${title} at Ram Krishna Homeo Hall & Clinic, Mashrakh`}
+                    loading="lazy"
+                  />
                   <div className="photo-caption">{title}</div>
                 </div>
               ))}
